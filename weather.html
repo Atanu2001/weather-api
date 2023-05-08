@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <style>
+        .weather{text-align: center;}
+        .display{padding: 40px;text-align:left;background: url(blur.jpg);background-position: center;width: 40%;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);}
+        .display div{background: rgb(255, 255, 255);opacity: 0.9;}
+        label{display: block;color: #000;}
+        label div{display: inline;}
+    </style>
+</head>
+<body>
+    <div class="weather">
+        <input type="text" name="city" id="cityname">
+        <input type="submit" value="show" class="button">
+    </div>
+    <div class="display">
+        <div>
+            <label>City Name :<div class="city"></div></label>
+            <label>Country Name :<div class="country"></div></label>
+            <label>Temperature :<div class="temp"></div></label>
+            <label>Humidity :<div class="humidity"></div></label>
+        </div>
+    </div>
+</body>
+<script>
+var city = document.querySelector("#cityname");    
+var button = document.querySelector(".button");
+const options = {
+	method: 'GET',
+	headers: {
+		'X-RapidAPI-Key': '5463c000b7mshb269b172bd41f94p153905jsn199ef027a92c',
+		'X-RapidAPI-Host': 'yahoo-weather5.p.rapidapi.com'
+	}
+};
+
+button.addEventListener("click",function(){
+    fetch('https://yahoo-weather5.p.rapidapi.com/weather?location='+city.value+'&format=json&u=f', options)
+	.then(response => response.json())
+	.then(data => { 
+        var cityname = data["location"]['city'];
+        var country = data["location"]['country'];
+        var temp = data["current_observation"]["condition"]["temperature"];
+        var humidity = data["current_observation"]["atmosphere"]["humidity"];
+        document.querySelector(".city").innerHTML = cityname;
+        document.querySelector(".country").innerHTML = country;
+        document.querySelector(".temp").innerHTML = temp;
+        document.querySelector(".humidity").innerHTML = humidity;
+    })
+	.catch(err => alert("wrong city"));
+});
+</script>
+</html>
